@@ -6,6 +6,7 @@
 </template>
 <script>
 import { page } from '../common/utils'{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
+
 export default {
   created{{#unless_eq lintConfig "airbnb"}} {{/unless_eq}}() {
     page.single(){{#if_eq lintConfig "airbnb"}};{{/if_eq}}
