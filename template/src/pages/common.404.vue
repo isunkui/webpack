@@ -14,7 +14,7 @@ export default {
 }{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
 </script>
 
-<style scoped>
+<style scoped type="text/less">
 html {
   -webkit-user-select:none;
   overflow: hidden;
