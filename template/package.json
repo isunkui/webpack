@@ -24,8 +24,15 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "vue": "^2.5.2"{{#router}},
-    "vue-router": "^3.0.1"{{/router}}
+    "vue": "^2.5.2",
+    {{#router}}
+    "vue-router": "^3.0.1",
+    {{/router}}
+    {{#vuex}}
+    "vuex": "^3.0.1"
+    {{/vuex}}
+    "axios": "^0.17.1",
+    "es6-promise": "^4.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -99,8 +106,11 @@
     "nightwatch": "^0.9.12",
     "selenium-server": "^3.0.1",
     {{/e2e}}
-    "postcss-import": "^11.0.0",
-    "postcss-loader": "^2.0.8",
+    {{#postcss}}
+    "postcss-center": "^1.1.0",
+    "postcss-pxtorem": "^4.0.1",
+    "postcss-salad": "^2.0.1",
+    {{/postcss}}
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "optimize-css-assets-webpack-plugin": "^3.2.0",

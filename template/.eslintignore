@@ -5,3 +5,6 @@
 {{#unit}}
 /test/unit/coverage/
 {{/unit}}
+src/common/*.js
+src/common/*/*.js
+src/assets/js/*/*.js

@@ -1,0 +1,163 @@
+/**
+ * 将px单位转换成rem
+ * px2rem
+ */
+.size {
+  width: 90px;
+  font-size: 28px;  /*px*/
+  border: 1px solid #eee; /*no*/ /*不编译*/
+}
+
+/**
+ * 将背景图片转换成base64
+ * postcss-assets
+ */
+.bg {
+  /*background: inline('../img/list-empty-bg.png') no-repeat;*/
+}
+
+/**
+ * 雪碧图插件
+ * postcss-sprites
+ */
+ /*.icon1 {*/
+   /*background: url('../img/sprite/icon-arrow-right.png') no-repeat;*/
+ /*}*/
+ /*.icon2 {*/
+   /*background: url('../img/sprite/icon-check.png') no-repeat;*/
+ /*}*/
+ /*.icon3 {*/
+   /*background: url('../img/sprite/icon-date.png') no-repeat;*/
+ /*}*/
+ /*.icon4 {*/
+   /*background: url('../img/sprite/icon-loading.png') no-repeat;*/
+ /*}*/
+ /*.icon5 {*/
+   /*background: url('../img/sprite/logo.png') no-repeat;*/
+ /*}*/
+
+/**
+ * 测试雪碧图___无效插件
+ * postcss-sprites
+ */
+/*.icon1 {
+  background: url('../img/icons/icon-puse-new.png') no-repeat;
+  background-size: 100% 100%;
+}
+.icon2 {
+  size: 1rem 2rem;
+  background: url('../img/icons/icon-stop-new.png') no-repeat;
+  background-size: 100% 100%;
+}*/
+
+/**
+ * 快速创建一个圆形
+ * postcss-circle
+ */
+
+.circle {
+  circle: 9rem #eee;
+}
+
+/**
+ * 快速创建一个等边三角形
+ * postcss-triangle
+ */
+
+.sanjiao {
+  triangle: pointing-right;
+  width: 3px;
+  height: 3px;
+  background-color: #eee;
+}
+
+/**
+ * 垂直或水平居中
+ * postcss-center
+ */
+
+.center {
+  top: center;
+  left: center;
+}
+.center2 {
+  left: center;
+}
+
+/**
+ * 快速清理浮动
+ * postcss-clearfix
+ */
+
+.clear {
+  clear: fix;
+}
+
+/* 支持ie6*/
+
+.clear2 {
+  clear: fix-legacy;
+}
+
+/**
+ * 一行定位
+ * postcss-position
+ */
+
+.absolute {
+  position: absolute 1rem 1rem 0 0;
+}
+
+/**
+ * 同时设置宽度和高度
+ * postcss-size
+ */
+
+.size_a {
+  size: 1rem 2rem;
+}
+.size_b {
+  size: 1rem;
+}
+
+/**
+ * 设置水平垂直间距
+ * postcss-verthorz
+ */
+
+.spacing {
+  padding-vert: 1rem;
+  margin-horz: 2rem;
+}
+.spacing_short {
+  pv: 1rem;
+  mh: 2rem;
+}
+
+/**
+ * 设置链接样式
+ * postcss-all-link-colors
+ */
+
+a {
+  @link-colors all #4D9ACC;
+}
+a.link {
+  @link-colors all #4D9ACC {
+    hover: #5BB8F4;
+  }
+}
+
+/*lost使用demo*/
+@lost gutter 15px; /*no*/
+section {
+  clear: fix;
+  .main {
+    lost-column: 3/5;
+    height: 100px;
+  }
+  .sidebar {
+    height: 100px;
+    lost-column: 2/5;
+  }
+}

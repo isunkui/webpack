@@ -1,0 +1,63 @@
+/**
+ * 字号转换mixin
+ * 调用方式
+ * @mixin font-dpr 12px;
+ * TODO: 目前postcss-px2rem已经解决了该问题
+ */
+/*@define-mixin font-dpr $font-size{*/
+    /*font-size: $font-size;*/
+
+    /*[data-dpr="2"] & {*/
+        /*font-size: calc($font-size * 2);*/
+    /*}*/
+
+    /*[data-dpr="3"] & {*/
+        /*font-size: calc($font-size * 3);*/
+    /*}*/
+/*}*/
+
+/**
+ * 圆角图片
+ * 调用方式:
+ * @extend roundImg;
+ */
+@define-extend roundImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  overflow: hidden;
+}
+
+/**
+ * 文字超出显示省略号
+ * 调用方式:
+ * @extend nowrap
+ */
+@define-extend nowrap {
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  justify-content: space-between;
+
+}
+
+@define-extend flex-row-center {
+  display: flex;
+  justify-content: center;
+}
+@define-extend flex-column-center {
+  display: flex;
+  align-items: center;
+}
+@define-extend flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@define-extend autoImg {
+  /*img {*/
+    width: 100%;
+    height: 100%;
+  /*}*/
+}
