@@ -1,10 +1,9 @@
-const utils = exports;
-import api from '../../vuex/api/axios';
+import api from './axios';
 // const debug = (process.env.NODE_ENV !== 'production');
 const debug = false;
 const url = debug ? 'http://static.doufan.tv/weixin/debug' : 'http://static.doufan.tv/weixin/live';
 
-exports.getQueryParams = function (name) {
+export const getQueryParams = function (name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
   var r = window.location.search.substr(1).match(reg);
   if (r != null) {
@@ -13,27 +12,27 @@ exports.getQueryParams = function (name) {
   return null;
 };
 
-exports.getCacheWechatUser = () => {
+export const getCacheWechatUser = () => {
   const wechatUser = JSON.parse(window.localStorage.getItem('wechatUser'));
   console.log('wechatUser:', wechatUser);
   return wechatUser;
 };
 
-exports.handleWechatLogin = () => {
+export const handleWechatLogin = () => {
   if (window.localStorage.token || window.location.href.indexOf('code=') !== -1) return;
   let currentUrl = window.location.href.split('&code=')[0];
   const redirect = encodeURIComponent(currentUrl);
   window.location.href = `${url}/wechat-login.html?t=${Date.now()}&redirect=${redirect}`;
 };
 
-exports.handleQqLogin = () => {
+export const handleQqLogin = () => {
   if (window.localStorage.token || window.location.href.indexOf('code=') !== -1) return;
   let currentUrl = window.location.href.split('&code=')[0];
   const redirect = encodeURIComponent(currentUrl);
   window.location.href = `${url}/qq-login.html?t=${Date.now()}&redirect=${redirect}`;
 };
 
-exports.handleShare = (context, shareData) => {
+export const handleShare = (context, shareData) => {
   const params = {
     url: window.location.href.split('&code=')[0],
     filter: true
@@ -107,4 +106,12 @@ exports.handleShare = (context, shareData) => {
       })
     }
   })
+};
+
+export default {
+  getQueryParams,
+  getCacheWechatUser,
+  handleWechatLogin,
+  handleQqLogin,
+  handleShare
 };

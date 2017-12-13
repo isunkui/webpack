@@ -83,3 +83,9 @@ textarea {
   resize: none;
   overflow: auto;
 }
+
+*[lazy=loading] {
+  margin: auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+}

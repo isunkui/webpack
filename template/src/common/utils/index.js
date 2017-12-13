@@ -6,9 +6,7 @@
  */
 'use strict';
 
-const utils = exports;
-
-exports.crypto = {};
+export const crypto = {};
 
 /**
  * 产生随机字符串
@@ -17,7 +15,7 @@ exports.crypto = {};
  * @param {String} chars 自定义生成字符串的内容
  * @return {String} 生成好的随机字符串
  */
-exports.crypto.randomString = function randomString(size, chars) {
+crypto.randomString = function randomString(size, chars) {
   size = size || 6;
   chars = chars || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const max = chars.length;
@@ -34,8 +32,8 @@ exports.crypto.randomString = function randomString(size, chars) {
  * @param {Integer} size 生成的长度
  * @return {String} 生成好的随机字符串
  */
-exports.crypto.randomNumber = function randomNumber(size) {
-  return utils.crypto.randomString(size, '0123456789');
+crypto.randomNumber = function randomNumber(size) {
+  return crypto.randomString(size, '0123456789');
 };
 
 /**
@@ -44,11 +42,11 @@ exports.crypto.randomNumber = function randomNumber(size) {
  * @param {Integer} size 生成的长度
  * @return {String} 生成好的随机字符串
  */
-exports.crypto.randomLetter = function randomLetter(size) {
-  return utils.crypto.randomString(size, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
+crypto.randomLetter = function randomLetter(size) {
+  return crypto.randomString(size, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
 };
 
-exports.string = {};
+export const string = {};
 
 /**
  * 向左填充自定义字符
@@ -57,7 +55,7 @@ exports.string = {};
  * @param {String} ch 填充字符
  * @return {string} 格式化好的字符串
  */
-exports.string.leftpad = (str, len, ch) => {
+string.leftpad = (str, len, ch) => {
   str = String(str);
   var i = -1;
   if (!ch && ch !== 0) ch = ' ';
@@ -68,7 +66,7 @@ exports.string.leftpad = (str, len, ch) => {
   return str;
 };
 
-exports.string.ellipsis = (str, len = 6) => {
+string.ellipsis = (str, len = 6) => {
   str = String(str);
   if (str.length > len) {
     return str.substr(0, len) + '...';
@@ -76,18 +74,18 @@ exports.string.ellipsis = (str, len = 6) => {
   return str;
 };
 
-exports.date = {};
+export const date = {};
 
 /**
  * 将毫秒值转换成字符串
  * @param {Number} ms 毫秒值
  * @return {String} 格式化后的字符串
  */
-exports.date.ms2HHMMSS = (ms) => {
+date.ms2HHMMSS = (ms) => {
   let hours = parseInt(ms / 1000 / 60 / 60, 10);
   let minutes = parseInt(ms / 1000 / 60 % 60, 10);
   let seconds = parseInt(ms / 1000 % 60, 10);
-  return `${utils.string.leftpad(hours, 2, 0)} : ${utils.string.leftpad(minutes, 2, 0)} : ${utils.string.leftpad(seconds, 2, 0)}`;
+  return `${string.leftpad(hours, 2, 0)} : ${string.leftpad(minutes, 2, 0)} : ${string.leftpad(seconds, 2, 0)}`;
 };
 
 /**
@@ -95,7 +93,7 @@ exports.date.ms2HHMMSS = (ms) => {
  * @param {Number} ms 毫秒值
  * @return {String} 格式化后的字符串
  */
-exports.date.ms2Minutes = (ms) => {
+date.ms2Minutes = (ms) => {
   let minutes = Math.ceil(ms / 1000 / 60 % 60);
   return `${minutes}分钟`;
 };
@@ -106,8 +104,8 @@ exports.date.ms2Minutes = (ms) => {
  * @param {String} fmt 格式化的模板
  * @return {String} 返回格式化好的值
  */
-exports.date.format = (date, fmt = 'YYYY-MM-DD hh:mm:ss') => {
-  return utils.date.toString(date, fmt);
+date.format = (date, fmt = 'YYYY-MM-DD hh:mm:ss') => {
+  return date.toString(date, fmt);
 };
 
 /**
@@ -119,7 +117,7 @@ exports.date.format = (date, fmt = 'YYYY-MM-DD hh:mm:ss') => {
  *  (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
  *  (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
  */
-exports.date.toString = (timestamp, fmt = 'YYYY-MM-DD') => {
+date.toString = (timestamp, fmt = 'YYYY-MM-DD') => {
   if (!timestamp) return '-';
   let date;
   if (timestamp instanceof Date) {
@@ -148,16 +146,16 @@ exports.date.toString = (timestamp, fmt = 'YYYY-MM-DD') => {
   return fmt;
 };
 
-exports.date.before = (n) => {
+date.before = (n) => {
   var now = new Date();
   now.setDate(now.getDate() - n);
   return now;
 };
 
-exports.number = {};
+export const number = {};
 
-exports.number.gem2Money = (gem = 0) => {
-  return utils.number.parse(gem / 1000, 2);
+number.gem2Money = (gem = 0) => {
+  return number.parse(gem / 1000, 2);
 }
 
 /**
@@ -166,7 +164,7 @@ exports.number.gem2Money = (gem = 0) => {
  * @param {Number} digits 保留小数位
  * @return {String} 返回转换好的百分比字符
  */
-exports.number.percentage = function(number, digits) {
+number.percentage = function(number, digits) {
   let result;
 
   if (digits === null || digits === undefined) {
@@ -174,7 +172,7 @@ exports.number.percentage = function(number, digits) {
   }
 
   digits = parseInt(digits, 10);
-  number = utils.number.parse(number, digits + 2);
+  number = number.parse(number, digits + 2);
   if (number === null || number === '' || isNaN(number)) {
     result = '-';
   } else {
@@ -190,7 +188,7 @@ exports.number.percentage = function(number, digits) {
  * @param {Number} digits 保留小数位
  * @return {Number} 返回四舍五入后的数值
  */
-exports.number.parse = (val, digits) => {
+number.parse = (val, digits) => {
   val = val || 0;
   if (digits === null || digits === undefined) {
     digits = 2;
@@ -198,15 +196,15 @@ exports.number.parse = (val, digits) => {
   return isFinite(val) ? Math.floor(val * Math.pow(10, digits)) / Math.pow(10, digits) : 0;
 };
 
-exports.object = {};
+export const object = {};
 
-exports.object.parse = (val) => {
+object.parse = (val) => {
   return JSON.parse(val);
 };
 
-exports.cdn = {};
+export const cdn = {};
 
-exports.cdn.convertImgDefault80 = (url, picSize = '@80w_80h_2e', onlyJpg = true) => {
+cdn.convertImgDefault80 = (url, picSize = '@80w_80h_2e', onlyJpg = true) => {
   if (!url) {
     return 'http://avatar.doufan.tv/default/avatar_default.jpg';
   }
@@ -221,10 +219,10 @@ exports.cdn.convertImgDefault80 = (url, picSize = '@80w_80h_2e', onlyJpg = true)
   if (index === -1) {
     return url + picSize;
   }
-  return utils.cdn.insertFlg(url, picSize, index);
+  return cdn.insertFlg(url, picSize, index);
 };
 
-exports.cdn.insertFlg = (str, flg, sn) => {
+cdn.insertFlg = (str, flg, sn) => {
   var newstr = '';
   let first = true;
   for (var i = 0; i < str.length; i += sn) {
@@ -240,12 +238,12 @@ exports.cdn.insertFlg = (str, flg, sn) => {
   return newstr;
 };
 
-exports.page = {};
+export const page = {};
 
 /**
  * 设置页面为单页，不能滑动
  */
-exports.page.single = () => {
+page.single = () => {
   document.body.addEventListener('touchmove', function (event) {
     event.preventDefault();
   }, false);
@@ -255,7 +253,7 @@ exports.page.single = () => {
  * 修改页面的标题
  * @param title
  */
-exports.page.modPageTitle = (title) => {
+page.modPageTitle = (title) => {
   // 修复ios下，不能触发修改页面标题的问题
   // 以下代码可以解决以上问题，不依赖jq
   setTimeout(() => {
@@ -275,7 +273,7 @@ exports.page.modPageTitle = (title) => {
   }, 0);
 };
 
-exports.page.infos = () => {
+page.infos = () => {
   const UA = window.navigator.userAgent.toLowerCase();
   const isAndroid = UA.indexOf('android') > 0;
   const isIOS = /iphone|ipad|ipod|ios/.test(UA);
@@ -298,7 +296,7 @@ exports.page.infos = () => {
   };
 };
 
-exports.filters = {};
+export const filters = {};
 
 const insertFlg = (str, flg, sn) => {
   var newstr = '';
@@ -316,9 +314,9 @@ const insertFlg = (str, flg, sn) => {
   return newstr;
 };
 
-exports.filters.cdnImg = (url, picSize = '@80w_80h_2e') => {
+filters.cdnImg = (url, picSize = 'h_80,w_80') => {
   if (!url) {
-    return '';
+    return 'http://avatar.doufan.tv/default/avatar_default.jpg';
   }
   if (!url.includes('doufan.tv')) return url;
   var index = url.indexOf('?timestamp=');
@@ -326,16 +324,31 @@ exports.filters.cdnImg = (url, picSize = '@80w_80h_2e') => {
     index = url.indexOf('?t=');
   }
   // var picSize = '@80w_80h_2e'
+
+  let fmt = `?x-oss-process=image/resize,m_fill,${picSize}`;
+
   if (index === -1) {
-    return url + picSize;
+    return url + fmt;
+  } else {
+    return url.substr(0, index) + fmt;
   }
-  return insertFlg(url, picSize, index);
 };
 
-exports.filters.time = (timestamp, fmt = 'YYYY-MM-DD hh:mm') => {
-  return utils.date.format(timestamp, fmt);
+filters.time = (timestamp, fmt = 'YYYY-MM-DD hh:mm') => {
+  return date.format(timestamp, fmt);
 };
 
-exports.filters.leftpad = utils.string.leftpad;
+filters.leftpad = string.leftpad;
 
-exports.filters.percentage = utils.number.percentage;
+filters.percentage = number.percentage;
+
+export default {
+  crypto,
+  string,
+  date,
+  number,
+  object,
+  cdn,
+  page,
+  filters
+}

@@ -3,7 +3,7 @@ const Promise = require('es6-promise').Promise;
 import qs from 'qs';
 import Vue from 'vue';
 import { page } from '../utils';
-import * as wechatUtils from './wechat';
+import wechatUtils from './wechat';
 
 // 使用库提供的配置默认值创建实例
 var api = axios.create();
@@ -83,5 +83,9 @@ api.interceptors.response.use((res) => {
   Vue.prototype.$me.Indicator.close();
   return Promise.reject(error);
 });
+
+api.setBaseUrl = (env) => {
+  api.defaults.baseURL = env !== 'test' ? BASE_API_URL : DEBUG_BASE_API_URL;
+};
 
 export default api;

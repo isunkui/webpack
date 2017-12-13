@@ -1,7 +1,15 @@
-
 import { filters } from '../utils'
 
-module.exports.cdnImg = filters.cdnImg;
-module.exports.time = filters.time;
-module.exports.leftpad = filters.leftpad;
-module.exports.percentage = filters.percentage;
+export const ms2Secnods = (ms) => {
+  let seconds = parseInt(ms / 1000, 10)
+  return seconds
+}
+export const cdnImg = filters.cdnImg;
+export const time = filters.time;
+export const leftpad = filters.leftpad;
+export const percentage = filters.percentage;
+
+export default {
+  ms2Secnods,
+  cdnImg
+}
