@@ -335,7 +335,7 @@ filters.cdnImg = (url, picSize = 'h_80,w_80') => {
 };
 
 filters.time = (timestamp, fmt = 'YYYY-MM-DD hh:mm') => {
-  return date.format(timestamp, fmt);
+  return date.toString(timestamp, fmt);
 };
 
 filters.leftpad = string.leftpad;
