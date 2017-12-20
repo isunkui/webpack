@@ -26,12 +26,42 @@ api.interceptors.request.use((config) => {
       text: '加载中...',
       spinnerType: 'snake'
     });
+    if (window.localStorage) {
+      const wechatUser = wechatUtils.getCacheWechatUser();
+      if (!wechatUser) {
+        wechatUtils.handleWechatLogin(config.data.env || config.params.env)
+        // Vue.prototype.$me.Indicator.close();
+        // Vue.prototype.$me.MessageBox({
+        //   title: '提示',
+        //   message: '检查到你还没有授权微信登录?',
+        //   showCancelButton: true,
+        //   closeOnClickModal: false
+        // }).then((action) => {
+        //   if ('cancel' !== action) {
+        //     wechatUtils.handleWechatLogin()
+        //   } else {
+        //     Vue.prototype.$me.Indicator.close()
+        //   }
+        // }, (e) => {
+        //   Vue.prototype.$me.Indicator.close();
+        // })
+        throw new Error('你还没有授权微信登录')
+      }
+    }
+
   }
   if (window.localStorage) {
     const wechatUser = wechatUtils.getCacheWechatUser();
     if (wechatUser) {
+      config.data['uid'] = window.localStorage.uid;
+      config.data['token'] = window.localStorage.token;
       config.data['openid'] = wechatUser.unionid || wechatUser.openid || '';
-      config.params['openid'] = wechatUser.unionid || wechatUser.openid || '';
+      if (config.method === 'get') {
+        config.params['uid'] = window.localStorage.uid;
+        config.params['token'] = window.localStorage.token;
+        config.params['openid'] = wechatUser.unionid || wechatUser.openid || '';
+        config.params['openid'] = wechatUser.unionid || wechatUser.openid || '';
+      }
     }
   }
 
@@ -42,10 +72,12 @@ api.interceptors.request.use((config) => {
 
   return config;
 }, (error) => {
+  console.log('拦截器异常：', error)
   Vue.prototype.$me.Toast({
     message: error.message,
     position: 'bottom'
   });
+  Vue.prototype.$me.Indicator.close();
   return Promise.reject(error);
 });
 
@@ -53,17 +85,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use((res) => {
   Vue.prototype.$me.Indicator.close();
   let data = res.data;
+  const config = res.config;
   // 拦截本地缓存 token 失效(token 不正确，token 失效).
   if (data.status === -1003 || data.status === -1004) {
-    window.localStorage.removeItem('token');
-    window.localStorage.removeItem('uid');
-    window.localStorage.removeItem('user');
-    window.localStorage.removeItem('openid');
-    window.localStorage.removeItem('wechatUser');
+    wechatUtils.handleClearCache();
+    let env = config && config.baseURL && config.baseURL.includes('test.api.doufan.tv') ? 'test' : '';
     if (page.infos().isWechat) {
-      wechatUtils.handleWechatLogin();
+      wechatUtils.handleWechatLogin(env);
     } else {
-      wechatUtils.handleQqLogin();
+      wechatUtils.handleQqLogin(env);
     }
     return;
   } else if (data.status !== 0) {
@@ -76,11 +106,12 @@ api.interceptors.response.use((res) => {
   }
   return data.data;
 }, (error) => {
+  console.log('response error:', error)
+  Vue.prototype.$me.Indicator.close();
   Vue.prototype.$me.Toast({
     message: error.message,
     position: 'bottom'
   });
-  Vue.prototype.$me.Indicator.close();
   return Promise.reject(error);
 });
 

@@ -1,7 +1,4 @@
 import api from './axios';
-// const debug = (process.env.NODE_ENV !== 'production');
-const debug = false;
-const url = debug ? 'http://static.doufan.tv/weixin/debug' : 'http://static.doufan.tv/weixin/live';
 
 export const getQueryParams = function (name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
@@ -14,22 +11,36 @@ export const getQueryParams = function (name) {
 
 export const getCacheWechatUser = () => {
   const wechatUser = JSON.parse(window.localStorage.getItem('wechatUser'));
-  console.log('wechatUser:', wechatUser);
   return wechatUser;
 };
 
-export const handleWechatLogin = () => {
-  if (window.localStorage.token || window.location.href.indexOf('code=') !== -1) return;
-  let currentUrl = window.location.href.split('&code=')[0];
-  const redirect = encodeURIComponent(currentUrl);
-  window.location.href = `${url}/wechat-login.html?t=${Date.now()}&redirect=${redirect}`;
+export const handleClearCache = () => {
+  window.localStorage.removeItem('token');
+  window.localStorage.removeItem('uid');
+  window.localStorage.removeItem('user');
+  window.localStorage.removeItem('wechatUser');
+  window.localStorage.removeItem('qqUser');
 };
 
-export const handleQqLogin = () => {
+const getBaseUrl = (env) => {
+  const url = env === 'test' ? 'http://static.doufan.tv/weixin/debug' : 'http://static.doufan.tv/weixin/live';
+  return url;
+};
+
+export const handleWechatLogin = (env) => {
+  handleClearCache();
   if (window.localStorage.token || window.location.href.indexOf('code=') !== -1) return;
   let currentUrl = window.location.href.split('&code=')[0];
   const redirect = encodeURIComponent(currentUrl);
-  window.location.href = `${url}/qq-login.html?t=${Date.now()}&redirect=${redirect}`;
+  window.location.href = `${getBaseUrl(env)}/wechat-login.html?t=${Date.now()}&redirect=${redirect}`;
+};
+
+export const handleQqLogin = (env) => {
+  handleClearCache();
+  if (window.localStorage.token || window.location.href.indexOf('code=') !== -1) return;
+  let currentUrl = window.location.href.split('&code=')[0];
+  const redirect = encodeURIComponent(currentUrl);
+  window.location.href = `${getBaseUrl(env)}/qq-login.html?t=${Date.now()}&redirect=${redirect}`;
 };
 
 export const handleShare = (context, shareData) => {
@@ -113,5 +124,6 @@ export default {
   getCacheWechatUser,
   handleWechatLogin,
   handleQqLogin,
-  handleShare
+  handleShare,
+  handleClearCache
 };
