@@ -10,7 +10,10 @@ import router from './router'{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
 {{#vuex}}
 import store from './vuex'{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
 {{/vuex}}
+// import './components/mint-ui'
+import DfBaseComponents from './components/base'
 
+Vue.use(DfBaseComponents)
 Vue.config.productionTip = false{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
 
 /* eslint-disable no-new */

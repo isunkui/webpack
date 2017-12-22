@@ -23,7 +23,9 @@ export default {
 </script>
 
 <style>
+  /*@import 'mint-ui/lib/style.css';*/
   @import "./assets/css/base/_reset.css";
+  @import "./assets/css/base/_anim.css";
 
   #app {
     height: 100%;
