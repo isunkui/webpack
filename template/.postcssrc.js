@@ -15,7 +15,14 @@ module.exports = {
     "postcss-pxtorem": {
       rootValue: 75,
       selectorBlackList: ['mint', 'msgbox', 'mt', 'picker', 'swipe', 'cube'],
-      propWhiteList: ['font', 'font-size', 'line-height', 'letter-spacing', 'width', 'height', 'margin', 'padding', 'border', 'margin-top', 'margin-left', 'margin-bottom', 'margin-right', 'left', 'right', 'top', 'bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'border-radius'],
+      propWhiteList: [
+        'font', 'font-size', 'line-height', 'letter-spacing', 'width', 'height', 'min-height', 'margin', 'padding',
+        'border', 'margin-top', 'margin-left', 'margin-bottom', 'margin-right', 'left', 'right', 'top', 'bottom',
+        'padding-left', 'padding-right', 'padding-top', 'padding-bottom', 'border-radius', 'border-bottom-left-radius',
+        'border-bottom-right-radius', 'border-top-left-radius', 'border-width',
+        'border-left', 'border-right', 'border-top', 'border-bottom',
+        'border-top-right-radius', 'background-position', 'background-size'
+      ],
       mediaQuery: true
     }
     {{/postcss}}

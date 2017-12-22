@@ -8,8 +8,6 @@ import wechatUtils from './wechat';
 // 使用库提供的配置默认值创建实例
 var api = axios.create();
 const DEBUG_BASE_API_URL = 'http://test.api.doufan.tv/web/';
-// const DEBUG_BASE_API_URL = 'http://nvpu.doufan.tv/web/';
-// const BASE_API_URL = 'http://test.api.doufan.tv/web/';
 const BASE_API_URL = 'http://nvpu.doufan.tv/web/';
 
 // 请求将在超时前等待5秒
@@ -21,35 +19,21 @@ api.defaults.baseURL = (process.env.NODE_ENV === 'production') ? BASE_API_URL : 
 api.interceptors.request.use((config) => {
   if (!config.data) config.data = {};
   if (!config.params) config.params = {};
-  if (!config.data.filter && !config.params.filter) {
+  if (config.data.loading || config.params.loading) {
     Vue.prototype.$me.Indicator.open({
       text: '加载中...',
       spinnerType: 'snake'
     });
-    if (window.localStorage) {
-      const wechatUser = wechatUtils.getCacheWechatUser();
-      if (!wechatUser) {
-        wechatUtils.handleWechatLogin(config.data.env || config.params.env)
-        // Vue.prototype.$me.Indicator.close();
-        // Vue.prototype.$me.MessageBox({
-        //   title: '提示',
-        //   message: '检查到你还没有授权微信登录?',
-        //   showCancelButton: true,
-        //   closeOnClickModal: false
-        // }).then((action) => {
-        //   if ('cancel' !== action) {
-        //     wechatUtils.handleWechatLogin()
-        //   } else {
-        //     Vue.prototype.$me.Indicator.close()
-        //   }
-        // }, (e) => {
-        //   Vue.prototype.$me.Indicator.close();
-        // })
-        throw new Error('你还没有授权微信登录')
-      }
-    }
-
   }
+
+  if ((config.data.auth || config.params.auth) && window.localStorage) {
+    const wechatUser = wechatUtils.getCacheWechatUser();
+    if (!wechatUser) {
+      wechatUtils.handleWechatLogin(config.data.env || config.params.env)
+      throw new Error('你还没有授权微信登录')
+    }
+  }
+
   if (window.localStorage) {
     const wechatUser = wechatUtils.getCacheWechatUser();
     if (wechatUser) {
