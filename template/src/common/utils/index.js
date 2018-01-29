@@ -160,25 +160,22 @@ number.gem2Money = (gem = 0) => {
 
 /**
  * 将数字转换成百分比字符串
- * @param {Number} number 要转换的数值
+ * @param {Number} num 要转换的数值
  * @param {Number} digits 保留小数位
  * @return {String} 返回转换好的百分比字符
  */
-number.percentage = function(number, digits) {
+number.percentage = function(num, digits) {
   let result;
-
   if (digits === null || digits === undefined) {
     digits = 2;
   }
-
   digits = parseInt(digits, 10);
-  number = number.parse(number, digits + 2);
-  if (number === null || number === '' || isNaN(number)) {
-    result = '-';
+  num = number.parse(num, digits + 2);
+  if (num === null || num === '' || isNaN(num)) {
+    result = '0%';
   } else {
-    result = Math.round(number * Math.pow(10, digits) * 100) / Math.pow(10, digits) + '%';
+    result = Math.round(num * Math.pow(10, digits) * 100) / Math.pow(10, digits) + '%';
   }
-
   return result;
 };
 
@@ -200,42 +197,6 @@ export const object = {};
 
 object.parse = (val) => {
   return JSON.parse(val);
-};
-
-export const cdn = {};
-
-cdn.convertImgDefault80 = (url, picSize = '@80w_80h_2e', onlyJpg = true) => {
-  if (!url) {
-    return 'http://avatar.doufan.tv/default/avatar_default.jpg';
-  }
-  if (!(url.indexOf('doufan.tv') > -1) || (url.indexOf('.jpg') === -1 && url.indexOf('.jpeg') === -1 && onlyJpg)) {
-    return url;
-  }
-  var index = url.indexOf('?timestamp=');
-  if (index === -1) {
-    index = url.indexOf('?t=');
-  }
-  // var picSize = '@80w_80h_2e'
-  if (index === -1) {
-    return url + picSize;
-  }
-  return cdn.insertFlg(url, picSize, index);
-};
-
-cdn.insertFlg = (str, flg, sn) => {
-  var newstr = '';
-  let first = true;
-  for (var i = 0; i < str.length; i += sn) {
-    var tmp = str.substring(i, i + sn);
-    // newstr = newstr + tmp + flg
-    if (first) {
-      newstr = tmp + flg;
-      first = false;
-    } else {
-      newstr = newstr + tmp;
-    }
-  }
-  return newstr;
 };
 
 export const page = {};
@@ -296,6 +257,12 @@ page.infos = () => {
   };
 };
 
+export const app = {};
+app.clientType = (() => {
+  let info = page.infos()
+  return info.isAndroid ? 1 : 2
+})()
+
 export const filters = {};
 
 const insertFlg = (str, flg, sn) => {
@@ -314,7 +281,12 @@ const insertFlg = (str, flg, sn) => {
   return newstr;
 };
 
-filters.cdnImg = (url, picSize = 'h_80,w_80') => {
+filters.cdnImg = (url, picSize) => {
+  if (Number.isInteger(picSize)) {
+    picSize = `h_${picSize},w_${picSize}`
+  } else if (!picSize) {
+    picSize = 'h_80,w_80'
+  }
   if (!url) {
     return 'http://avatar.doufan.tv/default/avatar_default.jpg';
   }
@@ -323,7 +295,6 @@ filters.cdnImg = (url, picSize = 'h_80,w_80') => {
   if (index === -1) {
     index = url.indexOf('?t=');
   }
-  // var picSize = '@80w_80h_2e'
 
   let fmt = `?x-oss-process=image/resize,m_fill,${picSize}`;
 
@@ -348,7 +319,7 @@ export default {
   date,
   number,
   object,
-  cdn,
   page,
+  app,
   filters
 }

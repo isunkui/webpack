@@ -2,13 +2,13 @@ import axios from 'axios';
 const Promise = require('es6-promise').Promise;
 import qs from 'qs';
 import Vue from 'vue';
-import { page } from '../utils';
+import { page, app } from '../utils';
 import wechatUtils from './wechat';
 
 // 使用库提供的配置默认值创建实例
 var api = axios.create();
-const DEBUG_BASE_API_URL = 'http://test.api.doufan.tv/web/';
-const BASE_API_URL = 'http://nvpu.doufan.tv/web/';
+const DEBUG_BASE_API_URL = 'https://tests.mahuatalk.com/web/';
+const BASE_API_URL = 'https://apis.mahuatalk.com/web/';
 
 // 请求将在超时前等待5秒
 api.defaults.timeout = 5000;
@@ -19,19 +19,19 @@ api.defaults.baseURL = (process.env.NODE_ENV === 'production') ? BASE_API_URL : 
 api.interceptors.request.use((config) => {
   if (!config.data) config.data = {};
   if (!config.params) config.params = {};
+
+  // 设置 api CommonParams
+  if (config.method === 'get' && config.data.setCommonParams) {
+    config.params[ 'clientType' ] = app.clientType
+  } else if (config.method === 'post' && config.data.setCommonParams) {
+    config.data['clientType'] = app.clientType
+  }
+
   if (config.data.loading || config.params.loading) {
     Vue.prototype.$me.Indicator.open({
       text: '加载中...',
       spinnerType: 'snake'
     });
-  }
-
-  if ((config.data.auth || config.params.auth) && window.localStorage) {
-    const wechatUser = wechatUtils.getCacheWechatUser();
-    if (!wechatUser) {
-      wechatUtils.handleWechatLogin(config.data.env || config.params.env)
-      throw new Error('你还没有授权微信登录')
-    }
   }
 
   if (window.localStorage) {

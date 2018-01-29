@@ -2,7 +2,7 @@
 /* eslint no-param-reassign:
  ["error", { "props": true, "ignorePropertyModificationsFor": ["state"] }] */
 {{/if_eq}}
-// import actions from './actions';
+import * as actions from './actions'
 import * as types from './constants'{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
 
 const moduleState = {
@@ -20,6 +20,6 @@ const mutations = {
 
 export default {
   state: moduleState,
-  // actions,
+  actions,
   mutations{{#if_eq lintConfig "airbnb"}},{{/if_eq}}
 }{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
