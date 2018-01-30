@@ -5,15 +5,56 @@
  * @date 2018/1/29
  */
 import api from '../../../common/service/axios'
-import { getCacheWechatUser, handleWechatLogin, getQueryParams, getCurrentUrl } from '../../../common/service/wechat'
+import {
+  hasAuthCache,
+  handleWechatLogin,
+  handleQqLogin,
+  getQueryParams,
+  getWechatCurrentUrl,
+  getQqCurrentUrl
+} from '../../../common/service/wechat'
 import * as types from './constants'
 const Promise = require('es6-promise').Promise
+
+export const fetchQqUserInfo = ({ commit }, { env, code, forceAuth = false }) => {
+  return new Promise((resolve, reject) => {
+    commit(types.LOADING_START)
+    const query = 'login/fetchQqUserInfo'
+    if (!forceAuth && hasAuthCache()) {
+      reject(new Error('缓存中获取'))
+      return
+    }
+    const result = handleQqLogin({ code, forceAuth })
+    if (result) {
+      reject(new Error('跳转授权页面.'))
+      return
+    }
+    api.setBaseUrl(env)
+    const redirectUri = getQqCurrentUrl()
+    api.post(query, { code, redirectUri, setCommonParams: true }).then(({ token, user, wechatUser, qqUserInfo }) => {
+      window.localStorage.setItem('token', token)
+      window.localStorage.setItem('user', JSON.stringify(user))
+      if (user && user.uid) window.localStorage.setItem('uid', user.uid)
+      if (wechatUser) {
+        window.localStorage.setItem('wechatUser', JSON.stringify(wechatUser))
+      }
+      if (qqUserInfo) {
+        window.localStorage.setItem('wechatUser', JSON.stringify(qqUserInfo))
+      }
+      commit(types.LOADING_DONE)
+      resolve({ token, user, wechatUser, qqUserInfo })
+    }).catch((err) => {
+      reject(err)
+      commit(types.LOADING_DONE)
+    })
+  })
+}
 
 export const fetchWechatUserInfo = ({ commit }, { env, forceAuth = false }) => {
   return new Promise((resolve, reject) => {
     commit(types.LOADING_START)
     const query = 'login/fetchWechatUserInfo'
-    if (!forceAuth && getCacheWechatUser()) {
+    if (!forceAuth && hasAuthCache()) {
       reject(new Error('缓存中获取'))
       return
     }
@@ -21,12 +62,13 @@ export const fetchWechatUserInfo = ({ commit }, { env, forceAuth = false }) => {
     const code = getQueryParams('code')
     const result = handleWechatLogin(forceAuth)
     if (result) {
-      reject(new Error('跳转授权.'))
+      reject(new Error('跳转授权页面.'))
       return
     }
     api.setBaseUrl(env)
     api.post(query, { code, setCommonParams: true }).then(({ token, user, wechatUser, qqUserInfo }) => {
       window.localStorage.setItem('token', token)
+      if (user && user.uid) window.localStorage.setItem('uid', user.uid)
       window.localStorage.setItem('user', JSON.stringify(user))
       if (wechatUser) {
         window.localStorage.setItem('wechatUser', JSON.stringify(wechatUser))
@@ -43,12 +85,17 @@ export const fetchWechatUserInfo = ({ commit }, { env, forceAuth = false }) => {
   })
 }
 
-export const handleWechatShare = ({ commit }, { title = '邀请你一起玩麻花语音', desc = '聆听他人故事，还能赚零花钱哟', imgUrl = 'http://static.doufan.tv/v2/fixed-img/logo.png', link = getCurrentUrl() }) => {
+export const handleWechatShare = ({ commit }, {
+  title = '邀请你一起玩麻花语音',
+  desc = '聆听他人故事，还能赚零花钱哟',
+  imgUrl = 'http://static.doufan.tv/v2/fixed-img/logo.png',
+  link = getWechatCurrentUrl()
+}) => {
   const shareData = {
     title, desc, imgUrl, link
   }
   // 替换掉包含code的query，微信授权后自动添加的。
-  shareData.link = getCurrentUrl()
+  shareData.link = getWechatCurrentUrl()
   const params = {
     url: window.location.href
   }

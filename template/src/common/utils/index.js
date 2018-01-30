@@ -260,7 +260,7 @@ page.infos = () => {
 export const app = {};
 app.clientType = (() => {
   let info = page.infos()
-  return info.isAndroid ? 1 : 2
+  return info.isAndroid ? 2 : 1
 })()
 
 export const filters = {};
