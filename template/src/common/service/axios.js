@@ -4,9 +4,10 @@ import qs from 'qs';
 import Vue from 'vue';
 import { page, app } from '../utils';
 import wechatUtils from './wechat';
+import { sharedState } from '../mixins/common';
 
 // 使用库提供的配置默认值创建实例
-var api = axios.create();
+export const api = axios.create();
 const DEBUG_BASE_API_URL = 'https://tests.mahuatalk.com/web/';
 const BASE_API_URL = 'https://apis.mahuatalk.com/web/';
 
@@ -20,6 +21,10 @@ api.interceptors.request.use((config) => {
   if (!config.data) config.data = {};
   if (!config.params) config.params = {};
 
+  // 设置 api 请求环境参数
+  config.data.env = sharedState.env;
+  config.params.env = sharedState.env;
+
   // 设置 api CommonParams
   if (config.method === 'get' && config.data.setCommonParams) {
     config.params[ 'clientType' ] = app.clientType
@@ -27,6 +32,7 @@ api.interceptors.request.use((config) => {
     config.data['clientType'] = app.clientType
   }
 
+  // 打开全局加载动画
   if (config.data.loading || config.params.loading) {
     Vue.prototype.$me.Indicator.open({
       text: '加载中...',
@@ -34,6 +40,7 @@ api.interceptors.request.use((config) => {
     });
   }
 
+  // 存在微信缓存，将用户信息上传.
   if (window.localStorage) {
     const wechatUser = wechatUtils.getCacheWechatUser();
     if (wechatUser) {
@@ -43,7 +50,6 @@ api.interceptors.request.use((config) => {
       if (config.method === 'get') {
         config.params['uid'] = window.localStorage.uid;
         config.params['token'] = window.localStorage.token;
-        config.params['openid'] = wechatUser.unionid || wechatUser.openid || '';
         config.params['openid'] = wechatUser.unionid || wechatUser.openid || '';
       }
     }

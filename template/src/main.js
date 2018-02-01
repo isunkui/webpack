@@ -12,9 +12,15 @@ import store from './vuex'{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
 {{/vuex}}
 // import './components/mint-ui'
 import DfBaseComponents from './components/base'
+// import filters from './common/filters'
+// import dlMixin from './common/mixins/dl'
+// import commonMixin from './common/mixins/common'
 
 Vue.use(DfBaseComponents)
 Vue.config.productionTip = false{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
+// Vue.prototype.$filters = filters
+// Vue.mixin(dlMixin)
+// Vue.mixin(commonMixin)
 
 /* eslint-disable no-new */
 new Vue({
