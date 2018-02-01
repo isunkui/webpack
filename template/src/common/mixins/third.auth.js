@@ -16,17 +16,17 @@ export default  {
     }
   },
   methods: {
-    handleAuth (forceAuth = false) {
+    handleAuth$ (forceAuth = false) {
       if (page.infos().isWechat) {
-        return this.handleWechatAuth(forceAuth)
+        return this.handleWechatAuth$(forceAuth)
       } else {
-        return this.handleQqAuth(forceAuth)
+        return this.handleQqAuth$(forceAuth)
       }
     },
-    handleWechatAuth (forceAuth = false) {
+    handleWechatAuth$ (forceAuth = false) {
       return this.fetchWechatUserInfo({ forceAuth, ...this.commonParams })
     },
-    handleQqAuth (forceAuth = false) {
+    handleQqAuth$ (forceAuth = false) {
       const code = this.$route.query.code
       return this.fetchQqUserInfo({ code, forceAuth, ...this.commonParams })
     },
