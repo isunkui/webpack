@@ -4,7 +4,6 @@ import qs from 'qs';
 import Vue from 'vue';
 import { page, app } from '../utils';
 import wechatUtils from './wechat';
-import { sharedState } from '../mixins/common';
 
 // 使用库提供的配置默认值创建实例
 export const api = axios.create();
@@ -21,15 +20,13 @@ api.interceptors.request.use((config) => {
   if (!config.data) config.data = {};
   if (!config.params) config.params = {};
 
-  // 设置 api 请求环境参数
-  config.data.env = sharedState.env;
-  config.params.env = sharedState.env;
-
   // 设置 api CommonParams
-  if (config.method === 'get' && config.data.setCommonParams) {
+  if (config.method === 'get' && config.params.setCommonParams) {
     config.params[ 'clientType' ] = app.clientType
+    delete config.params.setCommonParams
   } else if (config.method === 'post' && config.data.setCommonParams) {
     config.data['clientType'] = app.clientType
+    delete config.data.setCommonParams
   }
 
   // 打开全局加载动画

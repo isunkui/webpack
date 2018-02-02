@@ -16,7 +16,7 @@ import {
 import * as types from './constants'
 const Promise = require('es6-promise').Promise
 
-export const fetchQqUserInfo = ({ commit }, { env, code, forceAuth = false }) => {
+export const fetchQqUserInfo = ({ commit }, { code, forceAuth = false }) => {
   return new Promise((resolve, reject) => {
     commit(types.LOADING_START)
     const query = 'login/fetchQqUserInfo'
@@ -24,12 +24,13 @@ export const fetchQqUserInfo = ({ commit }, { env, code, forceAuth = false }) =>
       reject(new Error('缓存中获取'))
       return
     }
+
     const result = handleQqLogin({ code, forceAuth })
     if (result) {
       reject(new Error('跳转授权页面.'))
       return
     }
-    api.setBaseUrl(env)
+
     const redirectUri = getQqCurrentUrl()
     api.post(query, { code, redirectUri, setCommonParams: true }).then(({ token, user, wechatUser, qqUserInfo }) => {
       window.localStorage.setItem('token', token)
@@ -50,7 +51,7 @@ export const fetchQqUserInfo = ({ commit }, { env, code, forceAuth = false }) =>
   })
 }
 
-export const fetchWechatUserInfo = ({ commit }, { env, forceAuth = false }) => {
+export const fetchWechatUserInfo = ({ commit }, { forceAuth = false }) => {
   return new Promise((resolve, reject) => {
     commit(types.LOADING_START)
     const query = 'login/fetchWechatUserInfo'
@@ -65,7 +66,6 @@ export const fetchWechatUserInfo = ({ commit }, { env, forceAuth = false }) => {
       reject(new Error('跳转授权页面.'))
       return
     }
-    api.setBaseUrl(env)
     api.post(query, { code, setCommonParams: true }).then(({ token, user, wechatUser, qqUserInfo }) => {
       window.localStorage.setItem('token', token)
       if (user && user.uid) window.localStorage.setItem('uid', user.uid)
